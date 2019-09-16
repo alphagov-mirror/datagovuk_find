@@ -7,7 +7,6 @@ env:
 sudo: false
 language: ruby
 cache:
-  bundler: true
   yarn: true
 branches:
   only:
