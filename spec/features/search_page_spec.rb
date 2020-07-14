@@ -34,21 +34,21 @@ RSpec.feature "Search page", type: :feature, elasticsearch: true do
     index(old_dataset, new_dataset)
 
     search_for("Old Interesting Dataset")
-    expect(page).to have_css("option[selected]", text: "Best match")
+    expect(page).to have_select("sort", selected: "Best match")
 
     elements = all("h2 a")
     expect(elements[0]).to have_content "Old"
     expect(elements[1]).to have_content "Recent"
 
     filtered_search_for("Interesting Dataset", "Most recent")
-    expect(page).to have_css("option[selected]", text: "Most recent")
+    expect(page).to have_select("sort", selected: "Most recent")
 
     elements = all("h2 a")
     expect(elements[0]).to have_content "Recent"
     expect(elements[1]).to have_content "Old"
 
     filtered_search_for("Old Interesting Dataset", "Best match")
-    expect(page).to have_css("option[selected]", text: "Best match")
+    expect(page).to have_select("sort", selected: "Best match")
 
     elements = all("h2 a")
     expect(elements[0]).to have_content "Old"
@@ -81,10 +81,10 @@ RSpec.feature "Search page", type: :feature, elasticsearch: true do
     visit("/search")
     assert_data_set_length_is(2)
 
-    check("Open Government Licence (OGL) only")
+    find(".govuk-checkboxes__input").click
 
-    within(".dgu-filters__apply-button") do
-      find(".govuk-button").click
+    within("#search-box") do
+      find(".gem-c-search__submit").click
     end
 
     results = all("h2 a")
@@ -190,9 +190,9 @@ RSpec.feature "Search page", type: :feature, elasticsearch: true do
 
     expect(page).to have_title('Results for "Government"')
 
-    within "#content" do
+    within "#main-content" do
       fill_in "q", with: "bear"
-      find(".dgu-search-box__button").click
+      find(".gem-c-search__submit").click
     end
 
     expect(page).to have_title('Results for "bear"')
